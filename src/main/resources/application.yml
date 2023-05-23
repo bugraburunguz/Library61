@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT:8081}
+Spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    hikari:
+      jdbc-url: postgresql://localhost:5432/javadb
+      username: postgres
+      password: myPassword
+      driver-class-name: org.postgresql.Driver
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+Springfox:
+  documentation:
+    enabled: true
