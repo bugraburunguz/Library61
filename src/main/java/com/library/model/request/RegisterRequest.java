@@ -1,6 +1,5 @@
 package com.library.model.request;
 
-import com.library.validation.ValidEmail;
 import com.library.validation.ValidMobileNumber;
 import com.library.validation.ValidPassword;
 import lombok.Getter;
@@ -17,7 +16,6 @@ public class RegisterRequest {
     private String lastName;
     @NotEmpty(message = "nick name cannot be empty!")
     private String nickName;
-    @ValidEmail
     private String email;
     @ValidPassword
     private String password;

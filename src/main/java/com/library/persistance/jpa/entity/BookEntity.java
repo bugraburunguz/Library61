@@ -16,7 +16,11 @@ public class BookEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private String bookName;
+
     //tür enumlı olsun
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private WriterEntity writer;
