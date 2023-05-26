@@ -16,8 +16,8 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "seq_user_info", allocationSize = 1)
-    @GeneratedValue(generator = "seq_user_info", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_info")
+    @SequenceGenerator(name = "seq_user_info", sequenceName = "seq_user_info", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -39,18 +39,6 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String mail;
 
-    @Column(unique = true, nullable  = false)
+    @Column(unique = true, nullable = false)
     private String mobileNumber;
 }
-
-/*
- * id
- * isim
- * soyisim
- * segmentation
- * password
- * userName
- * number
- * reservationID
-
- */
