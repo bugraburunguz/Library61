@@ -1,7 +1,5 @@
 package com.library.validation.impl;
 
-import com.library.validation.ValidPassword;
-
 import lombok.RequiredArgsConstructor;
 import org.passay.*;
 
@@ -12,9 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
+public class PasswordConstraintValidator {
 
-    @Override
     public boolean isValid(final String password, ConstraintValidatorContext context) {
 
         PasswordValidator passwordValidator = getPasswordValidator();

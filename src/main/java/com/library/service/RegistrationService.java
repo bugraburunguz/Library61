@@ -27,9 +27,8 @@ public class RegistrationService {
 
         assertUserIsNotExisted(registerRequest.getMobileNumber());
         isEmailValid(registerRequest);
-        /*
-        valid işlemleri yapılacak
-         */
+        isMobileValid(registerRequest);
+
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName(registerRequest.getFirstName());
         userEntity.setLastName(registerRequest.getLastName());
@@ -40,10 +39,10 @@ public class RegistrationService {
         userEntity.setUserSegmentType(segmentType);
         userRepository.save(userEntity);
 
-        return toRegisterResponse(registerRequest,userEntity);
+        return toRegisterResponse(registerRequest, userEntity);
     }
 
-    public RegisterResponse toRegisterResponse(RegisterRequest registerRequest, UserEntity userEntity){
+    public RegisterResponse toRegisterResponse(RegisterRequest registerRequest, UserEntity userEntity) {
         RegisterResponse registerResponse = new RegisterResponse();
         registerResponse.setEmail(registerRequest.getEmail());
         registerResponse.setFirstName(registerRequest.getFirstName());
@@ -55,7 +54,13 @@ public class RegistrationService {
     }
 
     private void isEmailValid(RegisterRequest registerRequest) {
-        if(!GeneralValidator.validateEmail(registerRequest.getEmail())){
+        if (!GeneralValidator.validateEmail(registerRequest.getEmail())) {
+            throw new RuntimeException("Email geçerli değil");
+        }
+    }
+
+    private void isMobileValid(RegisterRequest registerRequest) {
+        if (!GeneralValidator.validateMobile(registerRequest.getEmail())) {
             throw new RuntimeException("Email geçerli değil");
         }
     }
