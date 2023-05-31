@@ -5,33 +5,49 @@ import com.library.persistance.jpa.entity.AuthorEntity;
 import com.library.persistance.jpa.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AuthorService {
+
     private final AuthorRepository authorRepository;
 
-    @Transactional
-    public AuthorRequest createAuthor(AuthorRequest authorRequest) {
+    public List<AuthorEntity> getAllAuthors() {
+        return authorRepository.findAll();
+    }
+
+    public AuthorEntity addAuthor(AuthorRequest authorRequest) {
         AuthorEntity author = new AuthorEntity();
-        author.setFirstName(authorRequest.getFirstName());
-        author.setLastName(authorRequest.getLastName());
-
-        authorRepository.save(author);
-        return authorRequest;
+        author.setName(authorRequest.getName());
+        return authorRepository.save(author);
     }
 
-    public Optional<AuthorEntity> getByAuthorName(String firstName, String lastName) {
-        return authorRepository.findAllByFirstNameOrLastName(firstName, lastName);
+    public AuthorEntity getAuthorById(Long id) {
+        Optional<AuthorEntity> author = authorRepository.findById(id);
+        return author.orElseThrow(() -> new EntityNotFoundException("Author with ID " + id + " not found"));
     }
 
-    public void deleteAuthorById(Long authorId) {
-        authorRepository.deleteById(authorId);
+    public AuthorEntity updateAuthor(Long id, AuthorEntity author) {
+        return authorRepository.findById(id)
+                .map(existingAuthor -> {
+                    existingAuthor.setName(author.getName());
+                    return authorRepository.save(existingAuthor);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Author with ID " + id + " not found"));
+    }
+
+    public void deleteAuthor(Long id) {
+        if (!authorRepository.existsById(id)) {
+            throw new EntityNotFoundException("Author with ID " + id + " not found");
+        }
+        authorRepository.deleteById(id);
     }
 }
 

@@ -1,12 +1,11 @@
 package com.library.controller;
 
-import com.library.model.enums.BookGenre;
 import com.library.model.request.BookRequest;
-import com.library.model.response.BookResponse;
+import com.library.persistance.jpa.entity.BookEntity;
 import com.library.service.BookService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,24 +14,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 public class BookController {
+
     private final BookService bookService;
 
-    @Operation(summary = "Create Book")
-    @PostMapping
-    public BookRequest createBook(@RequestHeader BookGenre bookGenre, @RequestBody @Validated BookRequest bookRequest) {
-        return bookService.createBook(bookRequest, bookGenre);
-    }
-
-    @Operation(summary = "Get Book by Name")
     @GetMapping
-    public List<BookResponse> getAuthorByWriter(@RequestParam String bookName) {
-        return bookService.getBookByName(bookName);
+    public List<BookEntity> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
+    @PostMapping
+    public BookEntity addBook(@RequestBody BookRequest book,@RequestParam Long authorId) {
+        return bookService.addBook(book, authorId);
+    }
 
-    @Operation(summary = "Delete User by Id")
-    @DeleteMapping("/delete")
-    public void deleteUserById(@RequestParam @Validated Long bookId) {
-        bookService.deleteBookById(bookId);
+    @GetMapping("/{id}/books")
+    public ResponseEntity<List<BookEntity>> getBooksByAuthorId(@PathVariable Long id) {
+        List<BookEntity> books = bookService.getBooksByAuthorId(id);
+        if (books.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(books);
+    }
+    @PutMapping("/{id}")
+    public BookEntity updateBook(@PathVariable Long id, @RequestBody BookEntity book) {
+        return bookService.updateBook(id, book);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 }

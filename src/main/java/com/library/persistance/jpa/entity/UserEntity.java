@@ -1,10 +1,9 @@
 package com.library.persistance.jpa.entity;
 
-import com.library.model.enums.UserSegmentType;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,32 +12,31 @@ import java.io.Serializable;
 @ToString
 @Entity
 @Table(name = "users")
-public class UserEntity implements Serializable {
-
+public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user_info")
-    @SequenceGenerator(name = "seq_user_info", sequenceName = "seq_user_info", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(nullable = false)
-    private UserSegmentType userSegmentType;
+    @Column(nullable = false, unique = true)
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String nickName;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private String mail;
+    private String phoneNumber;
 
-    @Column(unique = true, nullable = false)
-    private String mobileNumber;
+    @OneToMany(mappedBy = "user")
+    private Set<ReservationEntity> reservations;
+
+    @OneToMany(mappedBy = "user")
+    private Set<RentalEntity> rentals;
+
+    @OneToMany(mappedBy = "user")
+    private Set<ReviewEntity> reviews;
+
+
 }
