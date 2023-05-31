@@ -1,35 +1,39 @@
 package com.library.persistance.jpa.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.library.model.enums.BookGenre;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Builder
 @Entity
-@Table(name = "book")
-public class BookEntity implements Serializable {
+@Table(name = "books")
+public class BookEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_book_info")
-    @SequenceGenerator(name = "seq_book_info", sequenceName = "seq_book_info", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String bookName;
+    private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "authorId")
+    private AuthorEntity author;
 
     @Column(nullable = false)
-    private BookGenre genre;
+    private boolean availability;
 
-    @Column(nullable = false)
-    private Boolean availability;
+    @OneToMany(mappedBy = "book")
+    private Set<ReservationEntity> reservations;
 
-    @Column(name = "author_id")
-    private Long author;
+    @OneToMany(mappedBy = "book")
+    private Set<RentalEntity> rentals;
+
+    @OneToMany(mappedBy = "book")
+    private Set<ReviewEntity> reviews;
 }

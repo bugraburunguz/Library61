@@ -3,38 +3,43 @@ package com.library.controller;
 import com.library.model.request.AuthorRequest;
 import com.library.persistance.jpa.entity.AuthorEntity;
 import com.library.service.AuthorService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/writers")
+@RequestMapping("/authors")
 public class AuthorController {
+
     private final AuthorService authorService;
 
-    @Operation(summary = "Create Author")
-    @PostMapping
-    public ResponseEntity<AuthorRequest> createAuthor(@RequestBody @Validated AuthorRequest authorRequest) {
-        return ResponseEntity.ok(authorService.createAuthor(authorRequest));
-    }
-
-    @Operation(summary = "Get Author by Name")
     @GetMapping
-    public ResponseEntity<Optional<AuthorEntity>> getAuthorByWriter(@Parameter String authorFirstName,
-                                                                    @Parameter String authorLastName) {
-        return ResponseEntity.ok(authorService.getByAuthorName(authorFirstName, authorLastName));
+    public List<AuthorEntity> getAllAuthors() {
+        return authorService.getAllAuthors();
     }
 
-    @Operation(summary = "Delete User by Id")
-    @DeleteMapping("/delete")
-    public void deleteUserById(@RequestParam @Validated Long authorId) {
-        authorService.deleteAuthorById(authorId);
+    @PostMapping
+    public AuthorEntity addAuthor(@RequestBody AuthorRequest authorRequest) {
+        return authorService.addAuthor(authorRequest);
     }
 
+    @GetMapping("/{id}")
+    public AuthorEntity getAuthorById(@PathVariable Long id) {
+        return authorService.getAuthorById(id);
+    }
+
+    @PutMapping("/{id}")
+    public AuthorEntity updateAuthor(@PathVariable Long id, @RequestBody AuthorEntity author) {
+        return authorService.updateAuthor(id, author);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,29 +1,45 @@
 package com.library.controller;
 
-import com.library.model.response.RegisterResponse;
 import com.library.persistance.jpa.entity.UserEntity;
 import com.library.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
+import java.util.List;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
-    @Operation(summary = "Get User by Id")
     @GetMapping
-    public ResponseEntity<UserEntity> getUserById(@RequestParam Long userId) {
-     return ResponseEntity.ok(userService.getUserById(userId));
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @Operation(summary = "Delete User by Id")
-    @DeleteMapping("/delete")
-    public void deleteUserById(@RequestParam @Validated Long userId) {
-        userService.deleteUserById(userId);
+    @PostMapping
+    public ResponseEntity<UserEntity> addUser(@RequestBody UserEntity user) {
+        UserEntity savedUser = userService.addUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public UserEntity getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    @PutMapping("/{id}")
+    public UserEntity updateUser(@PathVariable Long id, @RequestBody UserEntity user) {
+        return userService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
