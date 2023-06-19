@@ -1,8 +1,10 @@
 package com.library.persistance.jpa.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -11,8 +13,13 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 @Table(name = "users")
-public class UserEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class UserEntity implements Serializable {
+
+    static final long serialVersionUID = 4235637833262722277L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,13 +36,10 @@ public class UserEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private Set<ReservationEntity> reservations;
 
-    @OneToMany(mappedBy = "user")
-    private Set<RentalEntity> rentals;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<ReviewEntity> reviews;
 
 

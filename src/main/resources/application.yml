@@ -3,7 +3,7 @@ server:
 Spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   datasource:
     hikari:
       jdbc-url: postgresql://localhost:5432/javadb
@@ -13,6 +13,6 @@ Spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-Springfox:
-  documentation:
-    enabled: true
+springdoc:
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}

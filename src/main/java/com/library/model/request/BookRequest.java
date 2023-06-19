@@ -1,6 +1,6 @@
 package com.library.model.request;
 
-import com.library.persistance.jpa.entity.AuthorEntity;
+import com.library.model.enums.BookGenre;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,4 +8,6 @@ import lombok.Setter;
 @Setter
 public class BookRequest {
     private String title;
+    private boolean availability;
+    private BookGenre bookGenre;
 }

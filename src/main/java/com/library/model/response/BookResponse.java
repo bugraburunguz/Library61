@@ -13,6 +13,4 @@ public class BookResponse {
     private BookGenre genre;
     private Boolean availability;
     private String authorName;
-    private Long authorId;
-
 }

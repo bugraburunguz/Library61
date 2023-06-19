@@ -1,18 +1,18 @@
 package com.library.persistance.jpa.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.library.model.enums.BookGenre;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "books")
+@EntityListeners(AuditingEntityListener.class)
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,19 +21,19 @@ public class BookEntity {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authorId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
     private AuthorEntity author;
 
     @Column(nullable = false)
     private boolean availability;
 
-    @OneToMany(mappedBy = "book")
+    @Column
+    private BookGenre bookGenre;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<ReservationEntity> reservations;
 
-    @OneToMany(mappedBy = "book")
-    private Set<RentalEntity> rentals;
-
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private Set<ReviewEntity> reviews;
 }

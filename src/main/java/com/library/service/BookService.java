@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.advice.exceptions.BookNotFoundException;
 import com.library.model.request.BookRequest;
 import com.library.model.response.BookResponse;
 import com.library.persistance.jpa.entity.AuthorEntity;
@@ -11,9 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,43 +23,65 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
-    public List<BookEntity> getAllBooks() {
-        return bookRepository.findAll();
+    public List<BookResponse> getAllBooks() {
+        List<BookEntity> bookEntityList = bookRepository.findAll();
+
+        return bookEntityList.stream()
+                .map(this::convertToBookResponse)
+                .collect(Collectors.toList());
     }
 
-    public BookEntity addBook(BookRequest bookRequest, Long authorId) {
+    public List<BookResponse> getBooksByAuthorName(String authorName) {
+        List<AuthorEntity> authors = authorRepository.findAllByName(authorName);
+
+        List<BookEntity> bookEntityList = authors.stream()
+                .flatMap(author -> bookRepository.findAllByAuthor(author).stream())
+                .collect(Collectors.toList());
+
+        return bookEntityList.stream()
+                .map(this::convertToBookResponse)
+                .collect(Collectors.toList());
+    }
+
+    private BookResponse convertToBookResponse(BookEntity bookEntity) {
+        return BookResponse.builder()
+                .bookName(bookEntity.getTitle())
+                .genre(bookEntity.getBookGenre())
+                .availability(bookEntity.isAvailability())
+                .authorName(bookEntity.getAuthor().getName())
+                .build();
+    }
+
+    public Long addBook(BookRequest request, Long authorId) {
         Optional<AuthorEntity> author = authorRepository.findById(authorId);
-        if(!author.isPresent()){
+        if (!author.isPresent()) {
             //Author bulunamadı exception olarak değiştir
             throw new EntityNotFoundException();
         }
         BookEntity bookEntity = new BookEntity();
-        bookEntity.setTitle(bookRequest.getTitle());
-        bookEntity.setAvailability(true);
+        bookEntity.setTitle(request.getTitle());
+        bookEntity.setAvailability(request.isAvailability());
+        bookEntity.setBookGenre(request.getBookGenre());
         bookEntity.setAuthor(author.get());
-        return bookRepository.save(bookEntity);
+
+        bookRepository.save(bookEntity);
+        return bookEntity.getId();
     }
 
-    public List<BookEntity> getBooksByAuthorId(Long authorId) {
-        Optional<AuthorEntity> author = authorRepository.findById(authorId);
-        if (!author.isPresent()) {
-            throw new EntityNotFoundException("Author with ID " + authorId + " not found");
+    public BookRequest updateBook(Long id, BookRequest book) {
+        Optional<BookEntity> existingBook = bookRepository.findById(id);
+        if (!existingBook.isPresent()) {
+            throw new BookNotFoundException();
         }
-        AuthorEntity authorEntity = author.get();
-        List<BookEntity> books = bookRepository.findAllByAuthor(authorEntity);
-        authorEntity.setBooks(books); // Yazar nesnesine kitapları ekleyin
-        return books;
-    }
+        if (Objects.nonNull(book.getTitle())) {
+            existingBook.get().setTitle(book.getTitle());
+        }
+        existingBook.get().setAvailability(book.isAvailability());
 
-    public BookEntity updateBook(Long id, BookEntity book) {
-        return bookRepository.findById(id)
-                .map(existingBook -> {
-                    existingBook.setTitle(book.getTitle());
-                    existingBook.setAuthor(book.getAuthor());
-                    //existingBook.setAvailability(book.avai);
-                    return bookRepository.save(existingBook);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Book with ID " + id + " not found"));
+        bookRepository.save(existingBook.get());
+
+        return book;
+
     }
 
     public void deleteBook(Long id) {
