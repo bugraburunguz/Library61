@@ -2,10 +2,8 @@ package com.library.controller;
 
 import com.library.model.request.UserRequest;
 import com.library.model.response.UserResponse;
-import com.library.persistance.jpa.entity.UserEntity;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +23,7 @@ public class UserController {
 
     @PostMapping
     public void addUser(@RequestBody UserRequest user) {
-       userService.addUser(user);
+        userService.addUser(user);
     }
 
     @GetMapping("/{id}")
