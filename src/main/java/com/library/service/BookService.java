@@ -46,6 +46,7 @@ public class BookService {
 
     private BookResponse convertToBookResponse(BookEntity bookEntity) {
         return BookResponse.builder()
+                .id(bookEntity.getId())
                 .bookName(bookEntity.getTitle())
                 .genre(bookEntity.getBookGenre())
                 .availability(bookEntity.isAvailability())

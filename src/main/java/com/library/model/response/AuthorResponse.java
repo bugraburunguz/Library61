@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class AuthorResponse {
+    private Long id;
     private String bookNames;
     private String authorName;
 }

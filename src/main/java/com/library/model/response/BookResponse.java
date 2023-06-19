@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class BookResponse {
+    private Long id;
     private String bookName;
     private BookGenre genre;
     private Boolean availability;

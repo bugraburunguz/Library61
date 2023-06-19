@@ -18,6 +18,7 @@ public class AuthorConverter {
                 .collect(Collectors.toList());
 
         return AuthorResponse.builder()
+                .id(authorEntity.getId())
                 .authorName(authorEntity.getName())
                 .bookNames(String.valueOf(bookNames))
                 .build();

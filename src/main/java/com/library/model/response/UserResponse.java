@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserResponse {
+    private Long id;
     private String username;
     private String email;
     private String phoneNumber;
@@ -17,6 +18,7 @@ public class UserResponse {
     @Getter
     @Setter
     public static class Reservation {
+        private Long reservationId;
         private String bookName;
         private LocalDate rentalStartDate;
         private LocalDate rentalEndDate;
