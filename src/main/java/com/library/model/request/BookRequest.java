@@ -9,5 +9,5 @@ import lombok.Setter;
 public class BookRequest {
     private String title;
     private boolean availability;
-    private BookGenre bookGenre;
+    private String bookGenre;
 }

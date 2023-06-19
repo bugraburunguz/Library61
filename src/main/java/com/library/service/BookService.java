@@ -2,6 +2,7 @@ package com.library.service;
 
 import com.library.advice.exceptions.AuthorNotFoundException;
 import com.library.advice.exceptions.BookNotFoundException;
+import com.library.model.enums.BookGenre;
 import com.library.model.request.BookRequest;
 import com.library.model.response.BookResponse;
 import com.library.persistance.jpa.entity.AuthorEntity;
@@ -48,7 +49,7 @@ public class BookService {
         return BookResponse.builder()
                 .id(bookEntity.getId())
                 .bookName(bookEntity.getTitle())
-                .genre(bookEntity.getBookGenre())
+                .genre(bookEntity.getBookGenre().getGenreName().toUpperCase(Locale.ROOT))
                 .availability(bookEntity.isAvailability())
                 .authorName(bookEntity.getAuthor().getName())
                 .build();
@@ -62,7 +63,7 @@ public class BookService {
         BookEntity bookEntity = new BookEntity();
         bookEntity.setTitle(request.getTitle());
         bookEntity.setAvailability(request.isAvailability());
-        bookEntity.setBookGenre(request.getBookGenre());
+        bookEntity.setBookGenre(BookGenre.valueOf(request.getBookGenre() .toUpperCase(Locale.ROOT)));
         bookEntity.setAuthor(author.get());
 
         bookRepository.save(bookEntity);

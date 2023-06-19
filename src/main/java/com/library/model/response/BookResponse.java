@@ -11,7 +11,7 @@ import lombok.Setter;
 public class BookResponse {
     private Long id;
     private String bookName;
-    private BookGenre genre;
+    private String genre;
     private Boolean availability;
     private String authorName;
 }

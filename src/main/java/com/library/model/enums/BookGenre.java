@@ -6,30 +6,30 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum BookGenre {
-    NOVEL(0),
-    CLASSIC_LITERATURE(1),
-    DETECTIVE_FICTION(2),
-    SCIENCE_FICTION(3),
-    FANTASY(4),
-    HORROR(5),
-    ADVENTURE(6),
-    HISTORY(7),
-    AUTOBIOGRAPHY(8),
-    BIOGRAPHY(9),
-    PHILOSOPHY(10),
-    PSYCHOLOGY(11),
-    BUSINESS_AND_LEADERSHIP(12),
-    POLITICS(13),
-    SCIENCE(14),
-    POETRY(15),
-    DRAMA(16),
-    TRAGEDY(17),
-    COMEDY(18),
-    TRAVEL_WRITING(19),
-    CHILDREN_AND_YOUNG_ADULT_LITERATURE(20),
-    LOVE(21),
-    MYSTERY(22);
+    NOVEL("Novel"),
+    CLASSIC_LITERATURE("Classic_Literature"),
+    DETECTIVE_FICTION("Detective_Fiction"),
+    SCIENCE_FICTION("Science_Fiction"),
+    FANTASY("Fantasy"),
+    HORROR("Horror"),
+    ADVENTURE("Adventure"),
+    HISTORY("History"),
+    AUTOBIOGRAPHY("Autobiography"),
+    BIOGRAPHY("Biography"),
+    PHILOSOPHY("Philosophy"),
+    PSYCHOLOGY("Psychology"),
+    BUSINESS_AND_LEADERSHIP("Business_and_Leadership"),
+    POLITICS("Politics"),
+    SCIENCE("Science"),
+    POETRY("Poetry"),
+    DRAMA("Drama"),
+    TRAGEDY("Tragedy"),
+    COMEDY("Comedy"),
+    TRAVEL_WRITING("Travel_Writing"),
+    CHILDREN_AND_YOUNG_ADULT_LITERATURE("Children_And_Young_Adult_Literature"),
+    LOVE("Love"),
+    MYSTERY("Mystery");
 
-    private int genreNumber;
+    private String genreName;
 }
 
