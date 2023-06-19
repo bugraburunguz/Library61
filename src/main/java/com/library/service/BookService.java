@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.advice.exceptions.AuthorNotFoundException;
 import com.library.advice.exceptions.BookNotFoundException;
 import com.library.model.request.BookRequest;
 import com.library.model.response.BookResponse;
@@ -55,8 +56,7 @@ public class BookService {
     public Long addBook(BookRequest request, Long authorId) {
         Optional<AuthorEntity> author = authorRepository.findById(authorId);
         if (!author.isPresent()) {
-            //Author bulunamadı exception olarak değiştir
-            throw new EntityNotFoundException();
+            throw new AuthorNotFoundException();
         }
         BookEntity bookEntity = new BookEntity();
         bookEntity.setTitle(request.getTitle());
