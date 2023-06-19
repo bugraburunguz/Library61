@@ -39,7 +39,7 @@ public class ReservationService {
         if (!book.isAvailability()) {
             throw new IllegalStateException("Book with ID " + request.getBookId() + " is not available");
         }
-        long daysBetween = ChronoUnit.DAYS.between(request.getRentalStartDate(), request.getRentalEndDate());
+        long daysBetween = ChronoUnit.DAYS.between(request.getRentalEndDate(), request.getRentalStartDate());
         if (daysBetween > 14) {
             throw new IllegalArgumentException("The reservation period cannot exceed 14 days");
         }
