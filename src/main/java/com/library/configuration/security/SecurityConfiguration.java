@@ -32,7 +32,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             // -- Other public endpoints of your application
             "/authenticate",
-            "/users"
+            "/users",
+            "/authors",
+            "/books",
+            "/reservation",
+            "/**"
     };
 
     private final UserDetailsService userDetailsService;
