@@ -1,7 +1,6 @@
 package com.library.converter;
 
 import com.library.model.response.AuthorResponse;
-import com.library.model.response.BookResponse;
 import com.library.persistance.jpa.entity.AuthorEntity;
 import com.library.persistance.jpa.entity.BookEntity;
 import lombok.AccessLevel;
@@ -23,6 +22,4 @@ public class AuthorConverter {
                 .bookNames(String.valueOf(bookNames))
                 .build();
     }
-
-
 }
