@@ -1,14 +1,25 @@
 package com.library.service;
 
+import com.library.advice.exceptions.InvalidEmailAddressException;
+import com.library.advice.exceptions.InvalidPasswordException;
+import com.library.advice.exceptions.InvalidPhoneNumberException;
+import com.library.converter.UserConverter;
+import com.library.model.request.UserRequest;
+import com.library.model.response.UserResponse;
 import com.library.persistance.jpa.entity.UserEntity;
 import com.library.persistance.jpa.repository.UserRepository;
+import com.library.validation.impl.GeneralValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+
+import static com.library.converter.UserConverter.convertToUserResponse;
+import static com.library.converter.UserConverter.convertToUserResponseList;
 
 @Service
 @Slf4j
@@ -16,22 +27,37 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<UserEntity> userEntity = userRepository.findAll();
+        return convertToUserResponseList(userEntity);
     }
 
-    public UserEntity addUser(UserEntity user) {
-        return userRepository.save(user);
+    public void addUser(UserRequest user) {
+
+        validateEmail(user.getEmail());
+        validatePassword(user.getPassword());
+        validatePhoneNumber(user.getPhoneNumber());
+
+        UserEntity userEntity = UserEntity.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .phoneNumber(user.getPhoneNumber())
+                .build();
+        userRepository.save(userEntity);
     }
 
-    public UserEntity getUserById(Long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
+    public UserResponse getUserById(Long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
+
+        return convertToUserResponse(userEntity);
     }
 
-    public UserEntity updateUser(Long id, UserEntity user) {
-        return userRepository.findById(id)
+    public UserRequest updateUser(Long id, UserRequest user) {
+        UserEntity userEntity = userRepository.findById(id)
                 .map(existingUser -> {
                     existingUser.setUsername(user.getUsername());
                     existingUser.setPassword(user.getPassword());
@@ -40,6 +66,7 @@ public class UserService {
                     return userRepository.save(existingUser);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
+        return UserConverter.convertToUserRequest(userEntity);
     }
 
     public void deleteUser(Long id) {
@@ -48,5 +75,24 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    private void validateEmail(String userEmail) {
+        if (!GeneralValidator.emailValidator(userEmail)) {
+            throw new InvalidEmailAddressException();
+        }
+    }
+
+    private void validatePassword(String userPassword) {
+        if (!GeneralValidator.passwordValidator(userPassword)) {
+            throw new InvalidPasswordException();
+        }
+    }
+
+    private void validatePhoneNumber(String userPassword) {
+        if (!GeneralValidator.mobileValidator(userPassword)) {
+            throw new InvalidPhoneNumberException();
+        }
+    }
+
 }
 

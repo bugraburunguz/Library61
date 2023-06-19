@@ -27,7 +27,8 @@ public enum BookGenre {
     COMEDY(18),
     TRAVEL_WRITING(19),
     CHILDREN_AND_YOUNG_ADULT_LITERATURE(20),
-    LOVE(21);
+    LOVE(21),
+    MYSTERY(22);
 
     private int genreNumber;
 }

@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import com.library.model.request.AuthorRequest;
+import com.library.model.response.AuthorResponse;
 import com.library.persistance.jpa.entity.AuthorEntity;
 import com.library.service.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping
-    public List<AuthorEntity> getAllAuthors() {
+    public List<AuthorResponse> getAllAuthors() {
         return authorService.getAllAuthors();
     }
 
@@ -28,12 +29,12 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public AuthorEntity getAuthorById(@PathVariable Long id) {
+    public AuthorResponse getAuthorById(@PathVariable Long id) {
         return authorService.getAuthorById(id);
     }
 
     @PutMapping("/{id}")
-    public AuthorEntity updateAuthor(@PathVariable Long id, @RequestBody AuthorEntity author) {
+    public AuthorEntity updateAuthor(@PathVariable Long id, @RequestBody AuthorRequest author) {
         return authorService.updateAuthor(id, author);
     }
 
