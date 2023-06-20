@@ -3,7 +3,7 @@ server:
 Spring:
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   datasource:
     hikari:
       jdbc-url: postgresql://localhost:5432/javadb

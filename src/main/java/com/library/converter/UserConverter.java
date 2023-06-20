@@ -22,12 +22,14 @@ public class UserConverter {
 
     public static UserResponse convertToUserResponse(UserEntity userEntity) {
         UserResponse userResponse = new UserResponse();
+        userResponse.setId(userEntity.getId());
         userResponse.setUsername(userEntity.getUsername());
         userResponse.setEmail(userEntity.getEmail());
         userResponse.setPhoneNumber(userEntity.getPhoneNumber());
         userResponse.setReservations(userEntity.getReservations().stream()
                 .map(reservation -> {
                     UserResponse.Reservation reservationResponse = new UserResponse.Reservation();
+                    reservationResponse.setReservationId(reservation.getId());
                     reservationResponse.setBookName(reservation.getBook().getTitle());
                     reservationResponse.setRentalStartDate(reservation.getRentalStartDate());
                     reservationResponse.setRentalEndDate(reservation.getRentalEndDate());

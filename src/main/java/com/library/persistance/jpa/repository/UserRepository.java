@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean findAllByEmail(String email);
     UserEntity findByUsername(String username);
+
 }

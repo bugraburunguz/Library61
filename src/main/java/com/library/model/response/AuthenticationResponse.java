@@ -10,5 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponse {
+    private Long id;
     private String jwtToken;
 }

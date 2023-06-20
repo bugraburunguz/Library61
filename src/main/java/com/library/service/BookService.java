@@ -55,8 +55,8 @@ public class BookService {
                 .build();
     }
 
-    public Long addBook(BookRequest request, Long authorId) {
-        Optional<AuthorEntity> author = authorRepository.findById(authorId);
+    public Long addBook(BookRequest request) {
+        Optional<AuthorEntity> author = authorRepository.findById(request.getAuthorId());
         if (!author.isPresent()) {
             throw new AuthorNotFoundException();
         }

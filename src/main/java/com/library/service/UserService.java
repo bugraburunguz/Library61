@@ -56,6 +56,12 @@ public class UserService {
         return convertToUserResponse(userEntity);
     }
 
+    public Long getUserByUserName(String userName) {
+        UserEntity userEntity = userRepository.findByUsername(userName);
+
+        return userEntity.getId();
+    }
+
     public UserRequest updateUser(Long id, UserRequest user) {
         UserEntity userEntity = userRepository.findById(id)
                 .map(existingUser -> {

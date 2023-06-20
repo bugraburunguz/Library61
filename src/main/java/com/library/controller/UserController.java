@@ -31,6 +31,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/getUserName")
+    public Long getUserByUserName(@RequestParam String userName) {
+        return userService.getUserByUserName(userName);
+    }
+
     @PutMapping("/{id}")
     public UserRequest updateUser(@PathVariable Long id, @RequestBody UserRequest user) {
         return userService.updateUser(id, user);
