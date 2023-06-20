@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RegisterServiceTest {
     @Test
     void testUsingUnicodeRegex() {
-        String emailAddress = "bugra@burunguz.com";
+        String emailAddress = "ahmet@kaya.com";
         String regexPattern = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         assertTrue(GeneralValidator.emailValidator(emailAddress), regexPattern);
     }
